@@ -8,5 +8,5 @@ jobs:
         uses: actions/checkout@v3
       - name: Batch run test
         env:
-        MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
+          MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
         run: bash run_magicpod_test.sh
