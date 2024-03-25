@@ -1,20 +1,12 @@
-# Pushした時にこのワークフローを実行する
 on: [push]
 
 jobs:
-  # job名(任意のjob名)
   magic_pod_job:
-
-    # virtual machineの形式を指定
-    runs-on: macos-latest # 今回はmacを指定
-
-    # job内のステップ
+    runs-on: macos-latest
     steps:
-      # ステップ1(チェックアウト)
       - name: Checkout
-      uses: actions/checkout@v3 # actionsのバージョンは最新を指定
-      # ステップ2(MagicPodで一括実行する)
+      uses: actions/checkout@v3
       - name: Batch run test
       env:
-      MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }} # GitHubで設定した変数名
-      run: bash run_magicpod_test.sh # 先ほど作成したシェルスクリプト
+      MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
+      run: bash run_magicpod_test.sh
