@@ -48,19 +48,14 @@ class MagicpodApiClientWrapper:
 
     def get_latest_batch_number(self, test_setting_name):
         latest_number = 0
-        url = f"https://magic-pod.com/api/v1.0/{self._org_name}/{self._project_name}/batch-runs/"
+        url = f"https://magic-pod.com/api/v1.0/{self._org_name}/{self._project_name}/batch-runs/?count=1"
         headers = {
             "Authorization": f"Token {self._secret_api_token}"
         }
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             result = response.json()
-            print(result)
-        for run in result['batch_runs']:
-            if run['test_setting_name'] == test_setting_name:
-                latest_number = run['batch_run_number']
-                break
-        print(latest_number)
+            latest_number = result['batch_runs']['batch_run_number']
         return latest_number
 
     def get_batch_run(self, batch_run_number):
