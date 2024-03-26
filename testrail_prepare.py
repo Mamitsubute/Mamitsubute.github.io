@@ -22,7 +22,9 @@ class TestRailAPIWrapper:
             'add_plan/'+str(project_id),entries)
         return response
 
-
+TESTRAIL_URL = os.environ.get("TESTRAIL_URL")
+TESTRAIL_USER = os.environ.get("TESTRAIL_USER")
+TESTRAIL_PASSWORD = os.environ.get("TESTRAIL_PASSWORD")
 TESTRAIL_TESTPLAN_JSON_FILENAME = '/testplan.json'
 TESTRAIL_PROJECT_ID = 3
 TESTRAIL_TESTPLAN_ENTRY = {
