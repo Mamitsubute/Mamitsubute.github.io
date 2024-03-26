@@ -34,4 +34,4 @@ jobs:
           MAGICPOD_PROJECT_NAME: ${{ secrets.MAGICPOD_PROJECT_NAME }}
           MAGICPOD_API_CLIENT_PATH: ${{ secrets.MAGICPOD_PROJECT_NAME }}
           MAGICPOD_TEST_SETTING_LIST: ${{ secrets.MAGICPOD_PROJECT_NAME }}
-        run: python testrail_prepare.py
+        run: python run_magicpod.py
