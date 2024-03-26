@@ -72,7 +72,7 @@ class MagicpodApiClientWrapper:
             return result
 
     def get_screenshots(self, batch_run_number):
-        temp_directory = self._tmp_dir + MAGICPOD_ORGANIZATION_NAME + "_" + MAGICPOD_PROJECT_NAME + "_" + str(batch_run_number)
+        temp_directory = self._tmp_dir + self._org_name + "_" + self._project_name + "_" + str(batch_run_number)
         temp_zipfile = temp_directory + "/screenshots_" + str(batch_run_number) + ".zip"
         if not os.path.exists(temp_directory):
             os.makedirs(temp_directory)
@@ -123,7 +123,7 @@ class MagicpodApiClientWrapper:
                 screenshot['number'] = match.group(1)
                 screenshot['name'] = match.group(2)
                 # パスを正規化
-                base_dir = self._tmp_dir + ORGANIZATION_NAME + "_" + PROJECT_NAME + "_" + str(json_data['batch_run_number'])
+                base_dir = self._tmp_dir + self._org_name + "_" + self._project_name + "_" + str(json_data['batch_run_number'])
                 screenshot['screenshot'] = os.path.normpath(base_dir + "/" + file_path)
                 screenshot_array.append(screenshot)
         # 2つ目のJSONデータを更新
