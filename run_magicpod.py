@@ -22,14 +22,14 @@ class MagicpodApiClientWrapper:
                 command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True,  # テキストモードで出力を取得
-                check=True  # エラーコードが非ゼロの場合に例外を発生させる
+                text=True,  # Get the output as text mode
+                check=True  # Raise an error is error code is not 0
             )
             return result.stdout, result.stderr
         except subprocess.CalledProcessError as e:
-            return None, f"エラー: コマンドがエラーコード {e.returncode} で終了しました。"
+            return None, f"Error: error code {e.returncode} "
         except FileNotFoundError:
-            return None, "エラー: コマンドが見つかりませんでした。"
+            return None, "Error: Command not found"
 
     def batch_run(self, setting):
         command = [
@@ -142,20 +142,19 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     MAGICPOD_API_TOKEN = os.environ.get("MAGICPOD_API_TOKEN")
     MAGICPOD_ORGANIZATION_NAME = os.environ.get("MAGICPOD_ORGANIZATION_NAME")
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
-    MAGICPOD_TEST_SETTING_LIST = os.environ.get("MAGICPOD_TEST_SETTING_LIST")
+    MAGICPOD_TEST_SETTING_NAME = os.environ.get("MAGICPOD_TEST_SETTING_NAME")
     client = MagicpodApiClientWrapper(secret_api_token=MAGICPOD_API_TOKEN, org_name=MAGICPOD_ORGANIZATION_NAME, project_name=MAGICPOD_PROJECT_NAME, cmd_path=magicpod_api_client_path, tmp_dir=temp_dir)
     # MagicPodテスト実行
     client.batch_run(test_setting)
     # テスト結果取得
-    # test_setting_name = next((item['name'] for item in MAGICPOD_TEST_SETTING_LIST if item['id'] == test_setting), None)
-    # latest_batch_number = client.get_latest_batch_number(test_setting_name)
-    # test_results = client.get_batch_run(latest_batch_number)
-    # screenshots = client.get_screenshots(latest_batch_number)
+    latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_NAME)
+    test_results = client.get_batch_run(latest_batch_number)
+    screenshots = client.get_screenshots(latest_batch_number)
     # テスト結果加工
-    # last_screenshots = client.get_max_numbered_files(screenshots)
-    # magicpod_result = client.update_testresults(test_results, last_screenshots)
-    # 結果をファイルに保存
-    # with open(output_filename, "w", encoding='utf-8') as file:
-    #     file.write(json.dumps(magicpod_result))
+    last_screenshots = client.get_max_numbered_files(screenshots)
+    magicpod_result = client.update_testresults(test_results, last_screenshots)
+    結果をファイルに保存
+    with open(output_filename, "w", encoding='utf-8') as file:
+        file.write(json.dumps(magicpod_result))
 
 run_magicpod(test_setting=1, output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client', temp_dir='./')
