@@ -158,4 +158,4 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     # with open(output_filename, "w", encoding='utf-8') as file:
     #     file.write(json.dumps(magicpod_result))
 
-run_magicpod(test_setting=1, output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client' temp_dir='./')
+run_magicpod(test_setting=1, output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client', temp_dir='./')
