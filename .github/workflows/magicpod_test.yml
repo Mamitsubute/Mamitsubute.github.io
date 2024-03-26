@@ -13,8 +13,12 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+      - name: Prepare testplan
+        env:
+          TESTRAIL_URL: ${{ secrets.TESTRAIL_URL }}
+          TESTRAIL_USER: ${{ secrets.TESTRAIL_USER }}
+          TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
+        run: python testrail_prepare.sh
       - name: Batch run test
         env:
           MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
