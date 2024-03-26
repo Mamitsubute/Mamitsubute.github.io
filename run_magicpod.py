@@ -141,7 +141,7 @@ def run_magicpod(test_setting, output_filename, temp_dir):
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
     MAGICPOD_API_CLIENT_PATH = os.environ.get("MAGICPOD_API_CLIENT_PATH")
     MAGICPOD_TEST_SETTING_LIST = os.environ.get("MAGICPOD_TEST_SETTING_LIST")
-    client = MagicpodApiClientWrapper(MAGICPOD_API_TOKEN, ORGANIZATION_NAME, PROJECT_NAME, MAGICPOD_API_CLIENT_PATH, temp_dir)
+    client = MagicpodApiClientWrapper(MAGICPOD_API_TOKEN, MAGICPOD_ORGANIZATION_NAME, MAGICPOD_PROJECT_NAME, MAGICPOD_API_CLIENT_PATH, temp_dir)
     # MagicPodテスト実行
     client.batch_run(test_setting)
     # テスト結果取得
