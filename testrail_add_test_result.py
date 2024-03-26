@@ -19,7 +19,7 @@ class TestRailAPIWrapper:
         # GET index.php?/api/v2/get_tests/:run_id
         response = self._client.send_get(
             'get_tests/'+str(run_id))
-        return response
+        return response['tests']
 
     def add_result(self, test_id, entries):
         # https://docs.testrail.techmatrix.jp/testrail/docs/702/api/reference/results/
