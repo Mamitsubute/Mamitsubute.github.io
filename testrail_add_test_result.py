@@ -71,12 +71,11 @@ def add_result(json_filename):
             testrun_id = testrun['id']
             # テストランIDからテストを取得
             tests = client.get_tests(testrun_id)
+            print(tests)
             # test
             for test in tests:
                 for magicpod_result in magicpod_results:
                     # magicpodの結果（name）とテストの名前を比較, 一致した場合、テスト結果を登録
-                    print(test['title'])
-                    print(magicpod_result['test_case']['name'])
                     if test['title'] == magicpod_result['test_case']['name']:
                         # 登録用のデータ整形
                         if magicpod_result['status'] == "succeeded":
