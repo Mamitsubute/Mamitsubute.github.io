@@ -55,7 +55,7 @@ class MagicpodApiClientWrapper:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
             result = response.json()
-            latest_number = result['batch_runs']['batch_run_number']
+            latest_number = result['batch_runs'][0]['batch_run_number']
         return latest_number
 
     def get_batch_run(self, batch_run_number):
