@@ -41,6 +41,7 @@ class MagicpodApiClientWrapper:
             "-S", str(setting)
         ]
         stdout, stderr = self._run_command(command)
+        print(command)
         print(stdout)
         print(stderr)
         return stdout
