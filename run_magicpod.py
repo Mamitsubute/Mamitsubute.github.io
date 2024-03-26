@@ -150,7 +150,8 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     # テスト結果加工
     last_screenshots = client.get_max_numbered_files(screenshots)
     magicpod_result = client.update_testresults(test_results, last_screenshots)
-    結果をファイルに保存
+    print(magicpod_result)
+    # 結果をファイルに保存
     with open(output_filename, "w", encoding='utf-8') as file:
         file.write(json.dumps(magicpod_result))
 
