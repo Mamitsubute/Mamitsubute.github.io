@@ -40,7 +40,7 @@ class MagicpodApiClientWrapper:
             "-p", self._project_name,
             "-S", str(setting)
         ]
-        stdout, stderr = self._run_command(command)
+        stdout, stderr = self._run_command(command=command)
         print(command)
         print(stdout)
         print(stderr)
@@ -72,7 +72,7 @@ class MagicpodApiClientWrapper:
             return result
 
     def get_screenshots(self, batch_run_number):
-        temp_directory = self._tmp_dir + ORGANIZATION_NAME + "_" + PROJECT_NAME + "_" + str(batch_run_number)
+        temp_directory = self._tmp_dir + MAGICPOD_ORGANIZATION_NAME + "_" + MAGICPOD_PROJECT_NAME + "_" + str(batch_run_number)
         temp_zipfile = temp_directory + "/screenshots_" + str(batch_run_number) + ".zip"
         if not os.path.exists(temp_directory):
             os.makedirs(temp_directory)
@@ -136,15 +136,14 @@ class MagicpodApiClientWrapper:
                     result["screenshot"] = screenshot['screenshot']
         return json_data
 
-def run_magicpod(test_setting, output_filename, temp_dir):
+def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_dir):
     if not temp_dir.endswith('/'):
         temp_dir += '/'
     MAGICPOD_API_TOKEN = os.environ.get("MAGICPOD_API_TOKEN")
     MAGICPOD_ORGANIZATION_NAME = os.environ.get("MAGICPOD_ORGANIZATION_NAME")
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
-    MAGICPOD_API_CLIENT_PATH = os.environ.get("MAGICPOD_API_CLIENT_PATH")
     MAGICPOD_TEST_SETTING_LIST = os.environ.get("MAGICPOD_TEST_SETTING_LIST")
-    client = MagicpodApiClientWrapper(MAGICPOD_API_TOKEN, MAGICPOD_ORGANIZATION_NAME, MAGICPOD_PROJECT_NAME, MAGICPOD_API_CLIENT_PATH, temp_dir)
+    client = MagicpodApiClientWrapper(secret_api_token=MAGICPOD_API_TOKEN, org_name=MAGICPOD_ORGANIZATION_NAME, project_name=MAGICPOD_PROJECT_NAME, cmd_path=magicpod_api_client_path, tmp_dir=temp_dir)
     # MagicPodテスト実行
     client.batch_run(test_setting)
     # テスト結果取得
@@ -159,4 +158,4 @@ def run_magicpod(test_setting, output_filename, temp_dir):
     # with open(output_filename, "w", encoding='utf-8') as file:
     #     file.write(json.dumps(magicpod_result))
 
-run_magicpod(test_setting=1, output_filename='./magicpod_result', temp_dir='./')
+run_magicpod(test_setting=1, output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client' temp_dir='./')
