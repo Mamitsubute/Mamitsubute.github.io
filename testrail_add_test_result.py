@@ -34,8 +34,6 @@ class TestRailAPIWrapper:
             'add_attachment_to_result/'+str(result_id),filename)
         return response
 
-        return
-
 TESTRAIL_URL = os.environ.get("TESTRAIL_URL")
 TESTRAIL_USER = os.environ.get("TESTRAIL_USER")
 TESTRAIL_PASSWORD = os.environ.get("TESTRAIL_PASSWORD")
@@ -65,8 +63,8 @@ def add_result(json_filename):
     # testrun
     is_succeed = 0
     testruns = testplan_data['entries'][0]['runs']
-    magicpod_type = magicpod_result_data['test_setting_name'] # Browser
-    magicpod_results = magicpod_result_data['test_cases']['details'][0]['results']
+    magicpod_type = magicpod_result_data['pattern_name']
+    magicpod_results = magicpod_result_data['test_cases']['details'][0]['pattern_name']
     for testrun in testruns:
         # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
         if testrun['config'] == magicpod_type:
@@ -77,6 +75,8 @@ def add_result(json_filename):
             for test in tests:
                 for magicpod_result in magicpod_results:
                     # magicpodの結果（name）とテストの名前を比較, 一致した場合、テスト結果を登録
+                    print(test['title'])
+                    print(magicpod_result['test_case']['name'])
                     if test['title'] == magicpod_result['test_case']['name']:
                         # 登録用のデータ整形
                         if magicpod_result['status'] == "succeeded":
