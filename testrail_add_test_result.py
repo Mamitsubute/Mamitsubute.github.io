@@ -63,8 +63,8 @@ def add_result(json_filename):
     # testrun
     is_succeed = 0
     testruns = testplan_data['entries'][0]['runs']
-    magicpod_type = magicpod_result_data['pattern_name']
-    magicpod_results = magicpod_result_data['test_cases']['details'][0]['pattern_name']
+    magicpod_type = magicpod_result_data['test_cases']['details'][0]['pattern_name']
+    magicpod_results = magicpod_result_data['test_cases']['details'][0]
     for testrun in testruns:
         # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
         if testrun['config'] == magicpod_type:
