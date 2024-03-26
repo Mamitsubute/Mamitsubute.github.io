@@ -39,4 +39,4 @@ jobs:
           TESTRAIL_URL: ${{ secrets.TESTRAIL_URL }}
           TESTRAIL_USER: ${{ secrets.TESTRAIL_USER }}
           TESTRAIL_PASSWORD: ${{ secrets.TESTRAIL_PASSWORD }}
-        run: python testrail_prepare.py
+        run: testrail_add_test_result.py
