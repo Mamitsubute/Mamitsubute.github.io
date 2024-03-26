@@ -41,6 +41,8 @@ class MagicpodApiClientWrapper:
             "-S", str(setting)
         ]
         stdout, stderr = self._run_command(command)
+        print(stdout)
+        print(stderr)
         return stdout
 
     def get_latest_batch_number(self, test_setting_name):
