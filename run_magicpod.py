@@ -145,15 +145,15 @@ def run_magicpod(test_setting, output_filename, temp_dir):
     # MagicPodテスト実行
     client.batch_run(test_setting)
     # テスト結果取得
-    test_setting_name = next((item['name'] for item in MAGICPOD_TEST_SETTING_LIST if item['id'] == test_setting), None)
-    latest_batch_number = client.get_latest_batch_number(test_setting_name)
-    test_results = client.get_batch_run(latest_batch_number)
-    screenshots = client.get_screenshots(latest_batch_number)
+    # test_setting_name = next((item['name'] for item in MAGICPOD_TEST_SETTING_LIST if item['id'] == test_setting), None)
+    # latest_batch_number = client.get_latest_batch_number(test_setting_name)
+    # test_results = client.get_batch_run(latest_batch_number)
+    # screenshots = client.get_screenshots(latest_batch_number)
     # テスト結果加工
-    last_screenshots = client.get_max_numbered_files(screenshots)
-    magicpod_result = client.update_testresults(test_results, last_screenshots)
+    # last_screenshots = client.get_max_numbered_files(screenshots)
+    # magicpod_result = client.update_testresults(test_results, last_screenshots)
     # 結果をファイルに保存
-    with open(output_filename, "w", encoding='utf-8') as file:
-        file.write(json.dumps(magicpod_result))
+    # with open(output_filename, "w", encoding='utf-8') as file:
+    #     file.write(json.dumps(magicpod_result))
 
 run_magicpod(test_setting=1, output_filename='./magicpod_result', temp_dir='./')
