@@ -72,6 +72,7 @@ def add_result(json_filename):
                         # TestRailのカスタムフィールドcustom_magicpod_urlでテストケースIDを特定、MagicPodの実行結果のtest_case.numberと突合する
                         pattern = r"\/(\d+)\/$"
                         test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
+                        print(i)
                         if int(test_case_id) == int(magicpod_pattern['results'][i]['test_case']['number']):
                             # 登録用のデータ整形
                             if magicpod_pattern['results'][i]['status'] == "succeeded":
