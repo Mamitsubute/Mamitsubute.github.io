@@ -72,32 +72,33 @@ def add_result(json_filename):
                         # TestRailのカスタムフィールドcustom_magicpod_urlでテストケースIDを特定、MagicPodの実行結果のtest_case.numberと突合する
                         pattern = r"\/(\d+)\/$"
                         test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
-                        print(i)
-                        if int(test_case_id) == int(magicpod_pattern['results'][i]['test_case']['number']):
-                            # 登録用のデータ整形
-                            if magicpod_pattern['results'][i]['status'] == "succeeded":
-                                status = 1
-                            elif magicpod_pattern['results'][i]['status'] == "failed":
-                                status = 5
-                            
-                            started_at = datetime.fromisoformat(magicpod_pattern['results'][i]['started_at'])
-                            if magicpod_pattern['results'][i]['finished_at'] == "":
-                                finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
-                            else:
-                                finished_at = datetime.fromisoformat(magicpod_pattern['results'][i]['finished_at'])
-                            elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
+                        results = magicpod_pattern[i]['results']
+                        for result in results:
+                            if int(test_case_id) == int(result['test_case']['number']):
+                                # 登録用のデータ整形
+                                if result['status'] == "succeeded":
+                                    status = 1
+                                elif result['status'] == "failed":
+                                    status = 5
+                                
+                                started_at = datetime.fromisoformat(result['started_at'])
+                                if result['finished_at'] == "":
+                                    finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
+                                else:
+                                    finished_at = datetime.fromisoformat(result['finished_at'])
+                                elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
 
-                            comment = f"MagicPod URL:{magicpod_result_data['url']}"
+                                comment = f"MagicPod URL:{magicpod_result_data['url']}"
 
-                            result_data = {
-                                "status_id": status,
-                                "comment": comment,
-                                "elapsed": elapsed_seconds,
-                            }
+                                result_data = {
+                                    "status_id": status,
+                                    "comment": comment,
+                                    "elapsed": elapsed_seconds,
+                                }
 
-                            # 登録
-                            add_result_response = client.add_result(test['id'], result_data)
-                            print(json.dumps(add_result_response, indent=4))
+                                # 登録
+                                add_result_response = client.add_result(test['id'], result_data)
+                                print(json.dumps(add_result_response, indent=4))
         i += 1
 
 add_result('./magicpod_result')
