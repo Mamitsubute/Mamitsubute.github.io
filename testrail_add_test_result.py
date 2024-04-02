@@ -56,12 +56,12 @@ def add_result(json_filename):
 
     # testrun
     is_succeed = 0
-    testruns = testplan_data['entries'][0]['runs']
     magicpod_patterns = magicpod_result_data['test_cases']['details']
     print('magicpod_patterns')
     print(magicpod_patterns)
+    i = 0
     for magicpod_pattern in magicpod_patterns:
-        i = 0
+        testruns = testplan_data['entries'][i]['runs']
         for testrun in testruns:
             # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
             if testrun['config'] == magicpod_pattern['pattern_name']:
