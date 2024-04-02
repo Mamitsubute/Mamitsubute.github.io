@@ -68,71 +68,6 @@ class MagicpodApiClientWrapper:
             result = response.json()
             return result
 
-    def get_screenshots(self, batch_run_number):
-        temp_directory = self._tmp_dir + self._org_name + "_" + self._project_name + "_" + str(batch_run_number)
-        temp_zipfile = temp_directory + "/screenshots_" + str(batch_run_number) + ".zip"
-        if not os.path.exists(temp_directory):
-            os.makedirs(temp_directory)
-        command = [
-            self._cmd_path,
-            "get-screenshots",
-            "-t", self._secret_api_token,
-            "-o", self._org_name,
-            "-p", self._project_name,
-            "-b", str(batch_run_number),
-            "-d", temp_zipfile
-        ]
-        stdout, stderr = self._run_command(command)
-        filelist = []
-        with zipfile.ZipFile(temp_zipfile) as zf:
-            filelist = zf.namelist()
-            zf.extractall(temp_directory)
-        return filelist
-
-    def get_max_numbered_files(self, file_paths):
-        # 各親フォルダごとに最も数字が大きいファイルのパスを格納するリスト
-        max_numbered_file_paths = []
-        # 親フォルダごとにファイルをグループ化
-        grouped_files = {}
-        for file_path in file_paths:
-            folder_name = os.path.dirname(file_path)
-            base_name = os.path.basename(file_path)
-            # パスを正規化
-            folder_name = os.path.normpath(folder_name)
-            if folder_name not in grouped_files:
-                grouped_files[folder_name] = []
-            grouped_files[folder_name].append(base_name)
-        # 各親フォルダ内のファイルで最も数字が大きいファイルを選択
-        for folder_name, file_names in grouped_files.items():
-            max_file = max(file_names, key=lambda x: int(os.path.splitext(x)[0]))
-            max_numbered_file_path = os.path.join(folder_name, max_file)
-            max_numbered_file_paths.append(max_numbered_file_path)
-        return max_numbered_file_paths
-
-    def update_testresults(self, json_data, file_paths):
-        # ファイルパスからテストケースの情報を抽出し、辞書に格納
-        screenshot_array = []
-        for file_path in file_paths:
-            # 正規表現を使用して数字と名前を抽出
-            match = re.search(r'(\d+)_(.+?)[/\\]', file_path)  # / または \ にマッチ
-            if match:
-                screenshot = {}
-                screenshot['number'] = match.group(1)
-                screenshot['name'] = match.group(2)
-                # パスを正規化
-                base_dir = self._tmp_dir + self._org_name + "_" + self._project_name + "_" + str(json_data['batch_run_number'])
-                screenshot['screenshot'] = os.path.normpath(base_dir + "/" + file_path)
-                screenshot_array.append(screenshot)
-        # 2つ目のJSONデータを更新
-        details = json_data.get("test_cases", {}).get("details", [])
-        for result in details[0]['results']:
-            number = result['test_case']['number']
-            name   = result['test_case']['name'].replace(' ', '_')
-            for screenshot in screenshot_array:
-                if screenshot['number'] == str(number) and screenshot['name'] == name:
-                    result["screenshot"] = screenshot['screenshot']
-        return json_data
-
 def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_dir):
     if not temp_dir.endswith('/'):
         temp_dir += '/'
@@ -147,10 +82,6 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_NAME)
     test_results = client.get_batch_run(latest_batch_number)
     screenshots = client.get_screenshots(latest_batch_number)
-    # テスト結果加工
-    last_screenshots = client.get_max_numbered_files(screenshots)
-    magicpod_result = client.update_testresults(test_results, last_screenshots)
-    print(magicpod_result)
     # 結果をファイルに保存
     with open(output_filename, "w", encoding='utf-8') as file:
         file.write(json.dumps(magicpod_result))

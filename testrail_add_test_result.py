@@ -27,13 +27,6 @@ class TestRailAPIWrapper:
             'add_result/'+str(test_id),entries)
         return response
 
-    def add_attachment(self, result_id, filename):
-        # https://docs.testrail.techmatrix.jp/testrail/docs/702/api/reference/attachments/
-        # POST index.php?/api/v2/add_attachment_to_result/:result_id
-        response = self._client.send_post(
-            'add_attachment_to_result/'+str(result_id),filename)
-        return response
-
 TESTRAIL_URL = os.environ.get("TESTRAIL_URL")
 TESTRAIL_USER = os.environ.get("TESTRAIL_USER")
 TESTRAIL_PASSWORD = os.environ.get("TESTRAIL_PASSWORD")
@@ -65,6 +58,7 @@ def add_result(json_filename):
     testruns = testplan_data['entries'][0]['runs']
     magicpod_type = magicpod_result_data['test_cases']['details'][0]['pattern_name']
     magicpod_results = magicpod_result_data['test_cases']['details'][0]['results']
+    print(magicpod_results)
     for testrun in testruns:
         # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
         if testrun['config'] == magicpod_type:
@@ -82,7 +76,6 @@ def add_result(json_filename):
                             status = 1
                         elif magicpod_result['status'] == "failed":
                             status = 5
-                            is_succeed = 1
                         
                         started_at = datetime.fromisoformat(magicpod_result['started_at'][:-1])
                         if magicpod_result['finished_at'] == "":
@@ -102,9 +95,5 @@ def add_result(json_filename):
                         # 登録
                         add_result_response = client.add_result(test['id'], result_data)
                         print(json.dumps(add_result_response, indent=4))
-
-                        add_attachment_to_result_response = client.add_attachment(add_result_response['id'], magicpod_result['screenshot'])
-                        print(json.dumps(add_attachment_to_result_response, indent=4))
-    return is_succeed
 
 add_result('./magicpod_result')
