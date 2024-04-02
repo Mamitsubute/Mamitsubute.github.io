@@ -76,7 +76,11 @@ def add_result(json_filename):
                     pattern = r"\/(\d+)\/$"
                     test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
                     print('test_case_id')
-                    print(test_case_id)                    
+                    print(test_case_id)         
+                    print(test_case_id.type())
+                    print('number')
+                    print(magicpod_result['test_case']['number'])         
+                    print(magicpod_result['test_case']['number'].type())                     
                     if test_case_id == magicpod_result['test_case']['number']:
                         # 登録用のデータ整形
                         if magicpod_result['status'] == "succeeded":
