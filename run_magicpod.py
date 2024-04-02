@@ -81,7 +81,6 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     # テスト結果取得
     latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_NAME)
     test_results = client.get_batch_run(latest_batch_number)
-    screenshots = client.get_screenshots(latest_batch_number)
     # 結果をファイルに保存
     with open(output_filename, "w", encoding='utf-8') as file:
         file.write(json.dumps(magicpod_result))
