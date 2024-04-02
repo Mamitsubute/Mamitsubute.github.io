@@ -97,6 +97,6 @@ def add_result(json_filename):
                         # 登録
                         add_result_response = client.add_result(test['id'], result_data)
                         print(json.dumps(add_result_response, indent=4))
-        i += 1
+            i += 1
 
 add_result('./magicpod_result')
