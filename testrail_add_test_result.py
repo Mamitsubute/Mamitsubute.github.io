@@ -79,11 +79,11 @@ def add_result(json_filename):
                         elif magicpod_pattern['results'][i]['status'] == "failed":
                             status = 5
                         
-                        started_at = datetime.fromisoformat(magicpod_pattern['results']['started_at'][:-1])
+                        started_at = datetime.fromisoformat(magicpod_pattern['results'][i]['started_at'])
                         if magicpod_pattern['results'][i]['finished_at'] == "":
                             finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
                         else:
-                            finished_at = datetime.fromisoformat(magicpod_pattern['results'][i]['finished_at'][:-1])
+                            finished_at = datetime.fromisoformat(magicpod_pattern['results'][i]['finished_at'])
                         elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
 
                         comment = f"MagicPod URL:{magicpod_result_data['url']}"
