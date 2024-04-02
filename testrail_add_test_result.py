@@ -57,46 +57,46 @@ def add_result(json_filename):
     # testrun
     is_succeed = 0
     magicpod_patterns = magicpod_result_data['test_cases']['details']
-    print('magicpod_patterns')
-    print(magicpod_patterns)
     i = 0
+    entries = testplan_data['entries']
     for magicpod_pattern in magicpod_patterns:
-        testruns = testplan_data['entries'][i]['runs']
-        for testrun in testruns:
-            # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
-            if testrun['config'] == magicpod_pattern['pattern_name']:
-                testrun_id = testrun['id']
-                # テストランIDからテストを取得
-                tests = client.get_tests(testrun_id)
-                for test in tests:
-                    # TestRailのカスタムフィールドcustom_magicpod_urlでテストケースIDを特定、MagicPodの実行結果のtest_case.numberと突合する
-                    pattern = r"\/(\d+)\/$"
-                    test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
-                    if int(test_case_id) == int(magicpod_pattern['results'][i]['test_case']['number']):
-                        # 登録用のデータ整形
-                        if magicpod_pattern['results'][i]['status'] == "succeeded":
-                            status = 1
-                        elif magicpod_pattern['results'][i]['status'] == "failed":
-                            status = 5
-                        
-                        started_at = datetime.fromisoformat(magicpod_pattern['results'][i]['started_at'])
-                        if magicpod_pattern['results'][i]['finished_at'] == "":
-                            finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
-                        else:
-                            finished_at = datetime.fromisoformat(magicpod_pattern['results'][i]['finished_at'])
-                        elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
+        for entry in entries:
+            testruns = entry['runs']
+            for testrun in testruns:
+                # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
+                if testrun['config'] == magicpod_pattern['pattern_name']:
+                    testrun_id = testrun['id']
+                    # テストランIDからテストを取得
+                    tests = client.get_tests(testrun_id)
+                    for test in tests:
+                        # TestRailのカスタムフィールドcustom_magicpod_urlでテストケースIDを特定、MagicPodの実行結果のtest_case.numberと突合する
+                        pattern = r"\/(\d+)\/$"
+                        test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
+                        if int(test_case_id) == int(magicpod_pattern['results'][i]['test_case']['number']):
+                            # 登録用のデータ整形
+                            if magicpod_pattern['results'][i]['status'] == "succeeded":
+                                status = 1
+                            elif magicpod_pattern['results'][i]['status'] == "failed":
+                                status = 5
+                            
+                            started_at = datetime.fromisoformat(magicpod_pattern['results'][i]['started_at'])
+                            if magicpod_pattern['results'][i]['finished_at'] == "":
+                                finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
+                            else:
+                                finished_at = datetime.fromisoformat(magicpod_pattern['results'][i]['finished_at'])
+                            elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
 
-                        comment = f"MagicPod URL:{magicpod_result_data['url']}"
+                            comment = f"MagicPod URL:{magicpod_result_data['url']}"
 
-                        result_data = {
-                            "status_id": status,
-                            "comment": comment,
-                            "elapsed": elapsed_seconds,
-                        }
+                            result_data = {
+                                "status_id": status,
+                                "comment": comment,
+                                "elapsed": elapsed_seconds,
+                            }
 
-                        # 登録
-                        add_result_response = client.add_result(test['id'], result_data)
-                        print(json.dumps(add_result_response, indent=4))
-            i += 1
+                            # 登録
+                            add_result_response = client.add_result(test['id'], result_data)
+                            print(json.dumps(add_result_response, indent=4))
+        i += 1
 
 add_result('./magicpod_result')
