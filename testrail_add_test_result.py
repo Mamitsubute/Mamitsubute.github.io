@@ -57,36 +57,33 @@ def add_result(json_filename):
     # testrun
     is_succeed = 0
     testruns = testplan_data['entries'][0]['runs']
-    magicpod_type = magicpod_result_data['test_cases']['details'][0]['pattern_name']
-    magicpod_results = magicpod_result_data['test_cases']['details'][0]['results']
+    magicpod_results = magicpod_result_data['test_cases']['details']
     print('magicpod_results')
     print(magicpod_results)
-    for testrun in testruns:
-        # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
-        if testrun['config'] == magicpod_type:
-            testrun_id = testrun['id']
-            # テストランIDからテストを取得
-            tests = client.get_tests(testrun_id)
-            print('tests')
-            print(tests)
-            # test
-            for magicpod_result in magicpod_results:
+    for magicpod_result in magicpod_results:
+        magicpod_type = magicpod_result['pattern_name']
+        for testrun in testruns:
+            # testrunとmagicpodの結果をマッピング（ブラウザ名で特定）し、テストランIDを特定
+            if testrun['config'] == magicpod_type:
+                testrun_id = testrun['id']
+                # テストランIDからテストを取得
+                tests = client.get_tests(testrun_id)
                 for test in tests:
                     # TestRailのカスタムフィールドcustom_magicpod_urlでテストケースIDを特定、MagicPodの実行結果のtest_case.numberと突合する
                     pattern = r"\/(\d+)\/$"
                     test_case_id = re.search(pattern, test['custom_magicpod_url']).group(1)
-                    if int(test_case_id) == int(magicpod_result['test_case']['number']):
+                    if int(test_case_id) == int(magicpod_result['results']['test_case']['number']):
                         # 登録用のデータ整形
-                        if magicpod_result['status'] == "succeeded":
+                        if magicpod_result['results']['status'] == "succeeded":
                             status = 1
-                        elif magicpod_result['status'] == "failed":
+                        elif magicpod_result['results']['status'] == "failed":
                             status = 5
                         
-                        started_at = datetime.fromisoformat(magicpod_result['started_at'][:-1])
-                        if magicpod_result['finished_at'] == "":
+                        started_at = datetime.fromisoformat(magicpod_result['results']['started_at'][:-1])
+                        if magicpod_result['results']['finished_at'] == "":
                             finished_at = datetime.fromisoformat(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
                         else:
-                            finished_at = datetime.fromisoformat(magicpod_result['finished_at'][:-1])
+                            finished_at = datetime.fromisoformat(magicpod_result['results']['finished_at'][:-1])
                         elapsed_seconds = str((finished_at - started_at).total_seconds()) + "s"
 
                         comment = f"MagicPod URL:{magicpod_result_data['url']}"
