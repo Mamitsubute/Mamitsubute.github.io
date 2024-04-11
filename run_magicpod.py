@@ -31,7 +31,7 @@ class MagicpodApiClientWrapper:
         except FileNotFoundError:
             return None, "Error: Command not found"
 
-    def batch_run(self, setting):
+    def batch_run(self, setting_id):
         command = [
             self._cmd_path,
             "batch-run",
@@ -68,21 +68,21 @@ class MagicpodApiClientWrapper:
             result = response.json()
             return result
 
-def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_dir):
+def run_magicpod(output_filename, magicpod_api_client_path, temp_dir):
     if not temp_dir.endswith('/'):
         temp_dir += '/'
     MAGICPOD_API_TOKEN = os.environ.get("MAGICPOD_API_TOKEN")
     MAGICPOD_ORGANIZATION_NAME = os.environ.get("MAGICPOD_ORGANIZATION_NAME")
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
-    MAGICPOD_TEST_SETTING_ID = os.environ.get("MAGICPOD_TEST_SETTING_ID")
+    MAGICPOD_TEST_SETTING_ID = 1
     client = MagicpodApiClientWrapper(secret_api_token=MAGICPOD_API_TOKEN, org_name=MAGICPOD_ORGANIZATION_NAME, project_name=MAGICPOD_PROJECT_NAME, cmd_path=magicpod_api_client_path, tmp_dir=temp_dir)
     # Run MagicPod tests
-    client.batch_run(test_setting)
+    client.batch_run(MAGICPOD_TEST_SETTING_ID)
     # Get test results
-    latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_ID)
+    latest_batch_number = client.get_latest_batch_number()
     test_results = client.get_batch_run(latest_batch_number)
     # Save test results in a file
     with open(output_filename, "w", encoding='utf-8') as file:
         file.write(json.dumps(test_results))
 
-run_magicpod(test_setting=1, output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client', temp_dir='./')
+run_magicpod(output_filename='./magicpod_result',magicpod_api_client_path='./magicpod-api-client', temp_dir='./')
