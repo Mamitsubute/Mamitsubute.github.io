@@ -76,12 +76,12 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
     MAGICPOD_TEST_SETTING_NAME = os.environ.get("MAGICPOD_TEST_SETTING_NAME")
     client = MagicpodApiClientWrapper(secret_api_token=MAGICPOD_API_TOKEN, org_name=MAGICPOD_ORGANIZATION_NAME, project_name=MAGICPOD_PROJECT_NAME, cmd_path=magicpod_api_client_path, tmp_dir=temp_dir)
-    # MagicPodテスト実行
+    # Run MagicPod tests
     client.batch_run(test_setting)
-    # テスト結果取得
+    # Get test results
     latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_NAME)
     test_results = client.get_batch_run(latest_batch_number)
-    # 結果をファイルに保存
+    # Save test results in a file
     with open(output_filename, "w", encoding='utf-8') as file:
         file.write(json.dumps(test_results))
 

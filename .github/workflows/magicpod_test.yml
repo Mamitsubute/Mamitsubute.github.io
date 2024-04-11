@@ -1,7 +1,4 @@
-on:
-  push:
-  workflow_dispatch:
-
+on: [push]
 jobs:
   magic_pod_job:
     runs-on: macos-latest
@@ -32,7 +29,6 @@ jobs:
           MAGICPOD_API_TOKEN: ${{ secrets.MAGICPOD_API_TOKEN }}
           MAGICPOD_ORGANIZATION_NAME: ${{ secrets.MAGICPOD_ORGANIZATION_NAME }}
           MAGICPOD_PROJECT_NAME: ${{ secrets.MAGICPOD_PROJECT_NAME }}
-          MAGICPOD_API_CLIENT_PATH: ${{ secrets.MAGICPOD_PROJECT_NAME }}
         run: python run_magicpod.py
       - name: Add test results to TestRail
         env:

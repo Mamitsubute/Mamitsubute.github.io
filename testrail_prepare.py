@@ -26,32 +26,26 @@ TESTRAIL_URL = os.environ.get("TESTRAIL_URL")
 TESTRAIL_USER = os.environ.get("TESTRAIL_USER")
 TESTRAIL_PASSWORD = os.environ.get("TESTRAIL_PASSWORD")
 TESTRAIL_TESTPLAN_JSON_FILENAME = './testplan.json'
-TESTRAIL_PROJECT_ID = 3
+TESTRAIL_PROJECT_ID = 3 # [ToDo]Change to the target project id in TestRail
 TESTRAIL_TESTPLAN_ENTRY = {
     "name": "testplan_name",
     "entries": [
         {
-            "suite_id": 3,
-            "include_all": True,
-            "config_ids": [5,6,7],
+            "suite_id": 3, # [ToDo]Change to the target suite_id in TestRail
+            "include_all": True, # All test cases in a suite will be included in the test plan
+            "config_ids": [5,6,7], # [ToDo]Change to the target config ids
             "runs": [
                 {
-                    "include_all": True,
-                    "case_ids": [9, 11], # MagicPodのテストに対応したテストケースを指定
-                    "assignedto_id": 1,
-                    "config_ids": [5] # Chrome
+                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
+                    "config_ids": [5] # [ToDo]Change to the target config id
                 },
                 {
-                    "include_all": True,
-                    "case_ids": [9, 11],
-                    "assignedto_id": 1,
-                    "config_ids": [6] # Edge
+                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
+                    "config_ids": [6] # [ToDo]Change to the target config id
                 },
                 {
-                    "include_all": True,
-                    "case_ids": [9, 11],
-                    "assignedto_id": 1,
-                    "config_ids": [7] # Firefox
+                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
+                    "config_ids": [7] # [ToDo]Change to the target config id
                 }
             ]
         },

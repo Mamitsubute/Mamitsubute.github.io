@@ -34,14 +34,14 @@ TESTRAIL_PASSWORD = os.environ.get("TESTRAIL_PASSWORD")
 TESTRAIL_TESTPLAN_JSON_FILENAME = './testplan.json'
 
 def add_result(json_filename):
-    print(f"Adding result using JSON file: {json_filename}")
+    print(f"Adding the result according to the JSON file: {json_filename}")
 
     if not os.path.exists(json_filename):
-        print("Error: json file not found.")
+        print("Error: json file is not found.")
         sys.exit(1)
 
     if not os.path.exists(TESTRAIL_TESTPLAN_JSON_FILENAME):
-        print("Error: testplan file not found.")
+        print("Error: testplan file is not found.")
         sys.exit(1)
     
     with open(TESTRAIL_TESTPLAN_JSON_FILENAME, "r") as f:
