@@ -46,7 +46,7 @@ class MagicpodApiClientWrapper:
         print(stderr)
         return stdout
 
-    def get_latest_batch_number(self, test_setting_name):
+    def get_latest_batch_number(self):
         latest_number = 0
         url = f"https://magic-pod.com/api/v1.0/{self._org_name}/{self._project_name}/batch-runs/?count=1"
         headers = {
@@ -74,12 +74,12 @@ def run_magicpod(test_setting, output_filename, magicpod_api_client_path, temp_d
     MAGICPOD_API_TOKEN = os.environ.get("MAGICPOD_API_TOKEN")
     MAGICPOD_ORGANIZATION_NAME = os.environ.get("MAGICPOD_ORGANIZATION_NAME")
     MAGICPOD_PROJECT_NAME = os.environ.get("MAGICPOD_PROJECT_NAME")
-    MAGICPOD_TEST_SETTING_NAME = os.environ.get("MAGICPOD_TEST_SETTING_NAME")
+    MAGICPOD_TEST_SETTING_ID = os.environ.get("MAGICPOD_TEST_SETTING_ID")
     client = MagicpodApiClientWrapper(secret_api_token=MAGICPOD_API_TOKEN, org_name=MAGICPOD_ORGANIZATION_NAME, project_name=MAGICPOD_PROJECT_NAME, cmd_path=magicpod_api_client_path, tmp_dir=temp_dir)
     # Run MagicPod tests
     client.batch_run(test_setting)
     # Get test results
-    latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_NAME)
+    latest_batch_number = client.get_latest_batch_number(MAGICPOD_TEST_SETTING_ID)
     test_results = client.get_batch_run(latest_batch_number)
     # Save test results in a file
     with open(output_filename, "w", encoding='utf-8') as file:
