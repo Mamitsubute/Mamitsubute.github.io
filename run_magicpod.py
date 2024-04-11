@@ -38,7 +38,7 @@ class MagicpodApiClientWrapper:
             "-t", self._secret_api_token,
             "-o", self._org_name,
             "-p", self._project_name,
-            "-S", str(setting)
+            "-S", str(setting_id)
         ]
         stdout, stderr = self._run_command(command=command)
         print(command)
