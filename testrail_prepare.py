@@ -36,15 +36,12 @@ TESTRAIL_TESTPLAN_ENTRY = {
             "config_ids": [5,6,7], # [ToDo]Change to the target config ids
             "runs": [
                 {
-                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
                     "config_ids": [5] # [ToDo]Change to the target config id
                 },
                 {
-                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
                     "config_ids": [6] # [ToDo]Change to the target config id
                 },
                 {
-                    "case_ids": [9, 11], # [ToDo]Change to the target test case ids in TestRail
                     "config_ids": [7] # [ToDo]Change to the target config id
                 }
             ]
